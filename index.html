@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Friday Coffee Club ☕</title>
+  <style>
+    :root {
+      --brown-dark: #3E2012;
+      --brown:      #6F4E37;
+      --brown-mid:  #9C6B41;
+      --caramel:    #C68642;
+      --cream:      #F5F0E8;
+      --cream-dark: #EDE4D3;
+      --white:      #FFFDF9;
+      --text:       #2C1810;
+      --text-mid:   #6B4226;
+      --shadow:     rgba(62,32,18,0.12);
+      --gold:       #F0B429;
+      --silver:     #B0BEC5;
+      --bronze:     #CD7F32;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
+
+    /* Header */
+    header { background: var(--brown-dark); color: var(--cream); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 64px; box-shadow: 0 2px 12px rgba(0,0,0,0.3); position: sticky; top: 0; z-index: 100; }
+    .logo { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px; }
+    .logo span { font-size: 1.5rem; }
+    nav { display: flex; gap: 4px; }
+    nav button { background: none; border: none; color: var(--cream); opacity: 0.65; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.15s; }
+    nav button:hover { opacity: 1; background: rgba(255,255,255,0.1); }
+    nav button.active { opacity: 1; background: rgba(255,255,255,0.15); }
+
+    /* Pages */
+    .page { display: none; max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+    .page.active { display: block; }
+
+    /* Cards */
+    .card { background: var(--white); border-radius: 16px; padding: 24px; box-shadow: 0 2px 16px var(--shadow); margin-bottom: 16px; }
+
+    h2 { font-size: 1.5rem; font-weight: 700; color: var(--brown-dark); margin-bottom: 24px; }
+    h3 { font-size: 1.1rem; font-weight: 600; color: var(--brown-dark); margin-bottom: 16px; }
+
+    /* Form */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.5px; }
+    input, textarea, select { padding: 10px 14px; border: 1.5px solid var(--cream-dark); border-radius: 10px; font-size: 0.95rem; background: var(--cream); color: var(--text); outline: none; transition: border-color 0.15s; font-family: inherit; }
+    input:focus, textarea:focus, select:focus { border-color: var(--caramel); background: var(--white); }
+    textarea { resize: vertical; min-height: 80px; }
+
+    /* Rating sliders */
+    .ratings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 4px; }
+    .rating-item { display: flex; flex-direction: column; gap: 8px; }
+    .rating-label-row { display: flex; justify-content: space-between; align-items: center; }
+    .rating-name { font-size: 0.82rem; font-weight: 600; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.5px; }
+    .rating-value { font-size: 1rem; font-weight: 700; color: var(--caramel); background: var(--cream); border-radius: 6px; padding: 2px 8px; min-width: 36px; text-align: center; }
+    input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px; background: var(--cream-dark); border: none; padding: 0; cursor: pointer; }
+    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--caramel); box-shadow: 0 1px 4px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.1s; }
+    input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+
+    /* Buttons */
+    .btn-primary { background: var(--brown); color: var(--cream); border: none; padding: 12px 28px; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.15s, transform 0.1s; margin-top: 8px; }
+    .btn-primary:hover { background: var(--brown-dark); }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-danger { background: none; border: 1.5px solid #e57373; color: #c62828; padding: 6px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+    .btn-danger:hover { background: #ffebee; }
+
+    /* Toast */
+    #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--brown-dark); color: var(--cream); padding: 12px 24px; border-radius: 12px; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,0.3); transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); z-index: 999; pointer-events: none; }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* Leaderboard */
+    .leaderboard-item { display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--white); border-radius: 14px; box-shadow: 0 2px 12px var(--shadow); margin-bottom: 12px; transition: transform 0.15s; }
+    .leaderboard-item:hover { transform: translateY(-1px); }
+    .rank { font-size: 1.5rem; font-weight: 800; min-width: 44px; text-align: center; color: var(--brown-mid); }
+    .rank.r1 { color: var(--gold); }
+    .rank.r2 { color: var(--silver); }
+    .rank.r3 { color: var(--bronze); }
+    .shop-info { flex: 1; }
+    .shop-name { font-size: 1.1rem; font-weight: 700; color: var(--brown-dark); }
+    .shop-meta { font-size: 0.82rem; color: var(--text-mid); margin-top: 3px; }
+    .score-badge { text-align: center; background: var(--cream); border-radius: 12px; padding: 8px 16px; }
+    .score-big { font-size: 1.5rem; font-weight: 800; color: var(--brown); line-height: 1; }
+    .score-label { font-size: 0.7rem; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+    .mini-bars { display: flex; gap: 4px; margin-top: 8px; flex-wrap: wrap; }
+    .mini-bar-group { display: flex; align-items: center; gap: 4px; background: var(--cream); border-radius: 6px; padding: 3px 8px; }
+    .mini-bar-label { font-size: 0.72rem; color: var(--text-mid); font-weight: 600; }
+    .mini-bar-val { font-size: 0.78rem; font-weight: 700; color: var(--caramel); }
+    .score-bar-container { margin-top: 6px; }
+    .score-bar { height: 4px; border-radius: 2px; background: var(--cream-dark); overflow: hidden; }
+    .score-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--brown-mid)); border-radius: 2px; transition: width 0.5s ease; }
+
+    /* History */
+    .visit-card { background: var(--white); border-radius: 14px; padding: 18px 20px; box-shadow: 0 2px 12px var(--shadow); margin-bottom: 12px; }
+    .visit-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+    .visit-shop { font-size: 1.05rem; font-weight: 700; color: var(--brown-dark); }
+    .visit-date { font-size: 0.8rem; color: var(--text-mid); }
+    .visit-ordered { font-size: 0.9rem; color: var(--text-mid); margin-bottom: 10px; }
+    .visit-ordered strong { color: var(--text); }
+    .visit-notes { font-size: 0.88rem; color: var(--text-mid); font-style: italic; margin-top: 8px; border-top: 1px solid var(--cream-dark); padding-top: 8px; }
+    .visit-scores { display: flex; gap: 6px; flex-wrap: wrap; }
+    .score-chip { background: var(--cream); border-radius: 6px; padding: 4px 10px; font-size: 0.78rem; font-weight: 600; color: var(--text-mid); }
+    .score-chip span { color: var(--caramel); font-weight: 700; }
+    .total-chip { background: var(--brown); color: var(--cream); border-radius: 6px; padding: 4px 10px; font-size: 0.78rem; font-weight: 700; }
+
+    .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty-state { text-align: center; padding: 48px 24px; color: var(--text-mid); }
+    .empty-state .emoji { font-size: 3rem; margin-bottom: 12px; }
+    .empty-state p { font-size: 1rem; }
+
+    @media (max-width: 540px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .ratings-grid { grid-template-columns: 1fr; }
+      nav button { padding: 8px 10px; font-size: 0.82rem; }
+      .logo { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><span>☕</span> Friday Coffee Club</div>
+  <nav>
+    <button onclick="showPage('leaderboard')" id="nav-leaderboard" class="active">Leaderboard</button>
+    <button onclick="showPage('add')" id="nav-add">Add Visit</button>
+    <button onclick="showPage('history')" id="nav-history">History</button>
+  </nav>
+</header>
+
+<!-- LEADERBOARD -->
+<div class="page active" id="page-leaderboard">
+  <h2>Leaderboard</h2>
+  <div id="leaderboard-list"><div class="empty-state"><div class="spinner" style="display:inline-block;border-color:var(--cream-dark);border-top-color:var(--caramel);width:32px;height:32px;border-width:3px;"></div></div></div>
+</div>
+
+<!-- ADD VISIT -->
+<div class="page" id="page-add">
+  <h2>Log a Coffee Visit</h2>
+  <div class="card">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Coffee Shop Name</label>
+        <input type="text" id="f-shop" placeholder="e.g. The Barn" />
+      </div>
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" id="f-date" />
+      </div>
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" id="f-name" placeholder="e.g. Luca" />
+      </div>
+      <div class="form-group">
+        <label>What You Ordered</label>
+        <input type="text" id="f-ordered" placeholder="e.g. Flat white, croissant" />
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Ratings <small style="font-weight:400;color:var(--text-mid);font-size:0.85rem;">(each out of 10)</small></h3>
+    <div class="ratings-grid" id="ratings-container"></div>
+  </div>
+
+  <div class="card">
+    <div class="form-group">
+      <label>Notes / Comments (optional)</label>
+      <textarea id="f-notes" placeholder="Anything else worth mentioning..."></textarea>
+    </div>
+  </div>
+
+  <button class="btn-primary" onclick="submitVisit()" id="submit-btn">Save Visit</button>
+</div>
+
+<!-- HISTORY -->
+<div class="page" id="page-history">
+  <h2>Visit History</h2>
+  <div id="history-list"></div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp }
+    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCJHPcyos1kuRykDWN3r-1pCFTHgMmmbJU",
+    authDomain: "coffee-fridays.firebaseapp.com",
+    projectId: "coffee-fridays",
+    storageBucket: "coffee-fridays.firebasestorage.app",
+    messagingSenderId: "668862906412",
+    appId: "1:668862906412:web:3b046bc5f944eeaca21189",
+    measurementId: "G-TQ6JXGN400"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const CRITERIA = [
+    { key: 'coffee',  label: 'Coffee Quality', emoji: '☕' },
+    { key: 'food',    label: 'Food',            emoji: '🥐' },
+    { key: 'vibe',    label: 'Vibe',            emoji: '✨' },
+    { key: 'service', label: 'Service',         emoji: '😊' },
+    { key: 'value',   label: 'Value for Money', emoji: '💰' },
+    { key: 'space',   label: 'Space / Seating', emoji: '🪑' },
+  ];
+
+  let allVisits = [];
+
+  /* ---- Real-time listener ---- */
+  const q = query(collection(db, 'visits'), orderBy('timestamp', 'desc'));
+  onSnapshot(q, snapshot => {
+    allVisits = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+    const active = document.querySelector('.page.active').id;
+    if (active === 'page-leaderboard') renderLeaderboard();
+    if (active === 'page-history') renderHistory();
+  });
+
+  /* ---- Navigation ---- */
+  window.showPage = function(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    document.getElementById('nav-' + name).classList.add('active');
+    if (name === 'leaderboard') renderLeaderboard();
+    if (name === 'history') renderHistory();
+  };
+
+  /* ---- Build rating sliders ---- */
+  function buildRatings() {
+    const container = document.getElementById('ratings-container');
+    container.innerHTML = '';
+    CRITERIA.forEach(c => {
+      container.innerHTML += `
+        <div class="rating-item">
+          <div class="rating-label-row">
+            <span class="rating-name">${c.emoji} ${c.label}</span>
+            <span class="rating-value" id="val-${c.key}">5</span>
+          </div>
+          <input type="range" min="1" max="10" value="5" id="slider-${c.key}"
+            oninput="document.getElementById('val-${c.key}').textContent = this.value" />
+        </div>`;
+    });
+  }
+
+  function setDefaults() {
+    document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('f-name').value = localStorage.getItem('last_name') || '';
+  }
+
+  /* ---- Submit ---- */
+  window.submitVisit = async function() {
+    const shop    = document.getElementById('f-shop').value.trim();
+    const date    = document.getElementById('f-date').value;
+    const name    = document.getElementById('f-name').value.trim();
+    const ordered = document.getElementById('f-ordered').value.trim();
+
+    if (!shop || !date || !name || !ordered) {
+      alert('Please fill in shop name, date, your name, and what you ordered.');
+      return;
+    }
+
+    const ratings = {};
+    CRITERIA.forEach(c => { ratings[c.key] = parseInt(document.getElementById('slider-' + c.key).value); });
+    const avg = +(Object.values(ratings).reduce((a, b) => a + b, 0) / CRITERIA.length).toFixed(1);
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Saving...';
+
+    try {
+      await addDoc(collection(db, 'visits'), {
+        shop, date, name, ordered, ratings, avg,
+        notes: document.getElementById('f-notes').value.trim(),
+        timestamp: serverTimestamp(),
+      });
+      localStorage.setItem('last_name', name);
+      document.getElementById('f-shop').value = '';
+      document.getElementById('f-ordered').value = '';
+      document.getElementById('f-notes').value = '';
+      buildRatings();
+      showToast('Visit saved! ☕');
+      setTimeout(() => window.showPage('leaderboard'), 800);
+    } catch (e) {
+      alert('Failed to save: ' + e.message);
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = 'Save Visit';
+  };
+
+  /* ---- Leaderboard ---- */
+  function renderLeaderboard() {
+    const container = document.getElementById('leaderboard-list');
+    if (!allVisits.length) {
+      container.innerHTML = `<div class="empty-state"><div class="emoji">☕</div><p>No visits yet — add your first coffee shop!</p></div>`;
+      return;
+    }
+    const shops = {};
+    allVisits.forEach(v => {
+      const key = v.shop.toLowerCase().trim();
+      if (!shops[key]) shops[key] = { name: v.shop, visits: [] };
+      shops[key].visits.push(v);
+    });
+    const ranked = Object.values(shops).map(s => {
+      const n = s.visits.length;
+      const avgScore = +(s.visits.reduce((a, v) => a + v.avg, 0) / n).toFixed(1);
+      const avgByKey = {};
+      CRITERIA.forEach(c => { avgByKey[c.key] = +(s.visits.reduce((a, v) => a + v.ratings[c.key], 0) / n).toFixed(1); });
+      return { name: s.name, count: n, avgScore, avgByKey };
+    }).sort((a, b) => b.avgScore - a.avgScore);
+
+    const medals = ['🥇', '🥈', '🥉'];
+    container.innerHTML = ranked.map((s, i) => {
+      const pct = (s.avgScore / 10 * 100).toFixed(0);
+      const miniBars = CRITERIA.map(c =>
+        `<div class="mini-bar-group"><span class="mini-bar-label">${c.emoji}</span><span class="mini-bar-val">${s.avgByKey[c.key]}</span></div>`
+      ).join('');
+      return `
+        <div class="leaderboard-item">
+          <div class="rank ${i < 3 ? 'r'+(i+1) : ''}">${medals[i] || '#'+(i+1)}</div>
+          <div class="shop-info">
+            <div class="shop-name">${esc(s.name)}</div>
+            <div class="shop-meta">${s.count} visit${s.count !== 1 ? 's' : ''}</div>
+            <div class="score-bar-container"><div class="score-bar"><div class="score-bar-fill" style="width:${pct}%"></div></div></div>
+            <div class="mini-bars">${miniBars}</div>
+          </div>
+          <div class="score-badge"><div class="score-big">${s.avgScore}</div><div class="score-label">avg / 10</div></div>
+        </div>`;
+    }).join('');
+  }
+
+  /* ---- History ---- */
+  function renderHistory() {
+    const container = document.getElementById('history-list');
+    if (!allVisits.length) {
+      container.innerHTML = `<div class="empty-state"><div class="emoji">📋</div><p>No visits yet!</p></div>`;
+      return;
+    }
+    container.innerHTML = allVisits.map(v => {
+      const chips = CRITERIA.map(c => `<div class="score-chip">${c.emoji} <span>${v.ratings[c.key]}</span></div>`).join('');
+      const dateStr = v.date ? new Date(v.date + 'T12:00:00').toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' }) : '';
+      return `
+        <div class="visit-card">
+          <div class="visit-header">
+            <div><div class="visit-shop">${esc(v.shop)}</div><div class="visit-date">${dateStr} · ${esc(v.name)}</div></div>
+            <button class="btn-danger" onclick="window.deleteVisit('${v.id}')">Delete</button>
+          </div>
+          <div class="visit-ordered"><strong>Ordered:</strong> ${esc(v.ordered)}</div>
+          <div class="visit-scores">${chips}<div class="total-chip">Avg: ${v.avg}/10</div></div>
+          ${v.notes ? `<div class="visit-notes">"${esc(v.notes)}"</div>` : ''}
+        </div>`;
+    }).join('');
+  }
+
+  window.deleteVisit = async function(id) {
+    if (!confirm('Delete this visit?')) return;
+    await deleteDoc(doc(db, 'visits', id));
+  };
+
+  /* ---- Toast ---- */
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  buildRatings();
+  setDefaults();
+</script>
+</body>
+</html>
