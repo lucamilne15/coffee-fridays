@@ -192,8 +192,8 @@
         <input type="text" id="rec-name" placeholder="e.g. Monmouth Coffee" />
       </div>
       <div class="form-group">
-        <label>Google Maps Link</label>
-        <input type="url" id="rec-url" placeholder="https://maps.google.com/..." />
+        <label>Google Maps Link <span style="font-weight:400;color:#c62828;font-size:0.75rem;text-transform:none;letter-spacing:0;">— no Apple Maps</span></label>
+        <input type="url" id="rec-url" placeholder="https://www.google.com/maps/..." />
       </div>
     </div>
     <div style="margin-top:12px;display:flex;align-items:center;gap:12px;">
@@ -220,7 +220,9 @@
     <div class="form-grid">
       <div class="form-group">
         <label>Coffee Shop</label>
-        <input type="text" id="f-shop" placeholder="e.g. The Barn" />
+        <select id="f-shop">
+          <option value="">— Select —</option>
+        </select>
       </div>
       <div class="form-group">
         <label>Date</label>
@@ -332,9 +334,24 @@
   onSnapshot(query(collection(db, 'recommendations'), orderBy('addedAt', 'asc')), snap => {
     allRecommendations = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderWeeklyPick();
+    refreshShopDropdown();
     const active = document.querySelector('.page.active').id;
     if (active === 'page-picks') renderPicksPool();
   });
+
+  /* ---- Shop dropdown (from recommendations) ---- */
+  function refreshShopDropdown() {
+    const sel = document.getElementById('f-shop');
+    const current = sel.value;
+    sel.innerHTML = '<option value="">— Select —</option>';
+    allRecommendations.forEach(r => {
+      const opt = document.createElement('option');
+      opt.value = r.name;
+      opt.textContent = r.name;
+      if (r.name === current) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  }
 
   /* ---- Profile dropdown ---- */
   function refreshProfileDropdown() {
@@ -423,7 +440,7 @@
 
   /* ---- Submit visit ---- */
   window.submitVisit = async function() {
-    const shop    = document.getElementById('f-shop').value.trim();
+    const shop    = document.getElementById('f-shop').value;
     const date    = document.getElementById('f-date').value;
     const sel     = document.getElementById('f-name');
     const name    = sel.value === '__new__' ? '' : sel.value;
@@ -451,6 +468,7 @@
       localStorage.setItem('last_name', name);
       document.getElementById('f-shop').value = '';
       document.getElementById('f-ordered').value = '';
+
       document.getElementById('f-notes').value = '';
       buildRatings();
       showToast('Visit saved! ☕');
@@ -469,7 +487,7 @@
     const err  = document.getElementById('rec-error');
     err.textContent = '';
     if (!name) { err.textContent = 'Enter a shop name.'; return; }
-    if (url && !url.startsWith('http')) { err.textContent = 'URL should start with http.'; return; }
+    if (url && !url.startsWith('https://www.google.com/maps')) { err.textContent = 'Only Google Maps links allowed (https://www.google.com/maps/...).'; return; }
 
     try {
       await addDoc(collection(db, 'recommendations'), {
