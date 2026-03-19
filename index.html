@@ -24,119 +24,193 @@
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
 
     /* Header */
-    header { background: var(--brown-dark); color: var(--cream); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 64px; box-shadow: 0 2px 12px rgba(0,0,0,0.3); position: sticky; top: 0; z-index: 100; }
-    .logo { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px; }
-    .logo span { font-size: 1.5rem; }
-    nav { display: flex; gap: 4px; }
-    nav button { background: none; border: none; color: var(--cream); opacity: 0.65; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.15s; }
+    header { background: var(--brown-dark); color: var(--cream); padding: 0 20px; display: flex; align-items: center; justify-content: space-between; height: 64px; box-shadow: 0 2px 12px rgba(0,0,0,0.3); position: sticky; top: 0; z-index: 100; }
+    .logo { font-size: 1.2rem; font-weight: 700; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+    nav { display: flex; gap: 2px; }
+    nav button { background: none; border: none; color: var(--cream); opacity: 0.65; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.88rem; font-weight: 500; transition: all 0.15s; white-space: nowrap; }
     nav button:hover { opacity: 1; background: rgba(255,255,255,0.1); }
     nav button.active { opacity: 1; background: rgba(255,255,255,0.15); }
 
     /* Pages */
-    .page { display: none; max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+    .page { display: none; max-width: 760px; margin: 0 auto; padding: 28px 16px 64px; }
     .page.active { display: block; }
 
     /* Cards */
-    .card { background: var(--white); border-radius: 16px; padding: 24px; box-shadow: 0 2px 16px var(--shadow); margin-bottom: 16px; }
+    .card { background: var(--white); border-radius: 16px; padding: 22px; box-shadow: 0 2px 16px var(--shadow); margin-bottom: 16px; }
 
-    h2 { font-size: 1.5rem; font-weight: 700; color: var(--brown-dark); margin-bottom: 24px; }
-    h3 { font-size: 1.1rem; font-weight: 600; color: var(--brown-dark); margin-bottom: 16px; }
+    h2 { font-size: 1.4rem; font-weight: 700; color: var(--brown-dark); margin-bottom: 20px; }
+    h3 { font-size: 1rem; font-weight: 600; color: var(--brown-dark); margin-bottom: 14px; }
+    .section-label { font-size: 0.75rem; font-weight: 700; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 12px; }
 
     /* Form */
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     .form-group.full { grid-column: 1 / -1; }
-    label { font-size: 0.82rem; font-weight: 600; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.5px; }
+    label { font-size: 0.78rem; font-weight: 600; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.5px; }
     input, textarea, select { padding: 10px 14px; border: 1.5px solid var(--cream-dark); border-radius: 10px; font-size: 0.95rem; background: var(--cream); color: var(--text); outline: none; transition: border-color 0.15s; font-family: inherit; }
     input:focus, textarea:focus, select:focus { border-color: var(--caramel); background: var(--white); }
     textarea { resize: vertical; min-height: 80px; }
 
+    /* New person inline input */
+    #new-person-row { display: none; flex-direction: column; gap: 6px; margin-top: 8px; }
+    #new-person-row.visible { display: flex; }
+    .new-person-controls { display: flex; gap: 8px; }
+    .new-person-controls input { flex: 1; }
+    .btn-sm { background: var(--brown); color: var(--cream); border: none; padding: 10px 16px; border-radius: 10px; font-size: 0.88rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .btn-sm:hover { background: var(--brown-dark); }
+    .btn-sm-ghost { background: none; border: 1.5px solid var(--cream-dark); color: var(--text-mid); padding: 10px 14px; border-radius: 10px; font-size: 0.88rem; font-weight: 600; cursor: pointer; }
+    .btn-sm-ghost:hover { border-color: var(--caramel); }
+
     /* Rating sliders */
-    .ratings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 4px; }
+    .ratings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     .rating-item { display: flex; flex-direction: column; gap: 8px; }
     .rating-label-row { display: flex; justify-content: space-between; align-items: center; }
-    .rating-name { font-size: 0.82rem; font-weight: 600; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.5px; }
+    .rating-name { font-size: 0.8rem; font-weight: 600; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.5px; }
     .rating-value { font-size: 1rem; font-weight: 700; color: var(--caramel); background: var(--cream); border-radius: 6px; padding: 2px 8px; min-width: 36px; text-align: center; }
     input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px; background: var(--cream-dark); border: none; padding: 0; cursor: pointer; }
     input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--caramel); box-shadow: 0 1px 4px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.1s; }
     input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 
     /* Buttons */
-    .btn-primary { background: var(--brown); color: var(--cream); border: none; padding: 12px 28px; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.15s, transform 0.1s; margin-top: 8px; }
+    .btn-primary { background: var(--brown); color: var(--cream); border: none; padding: 12px 28px; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.15s, transform 0.1s; }
     .btn-primary:hover { background: var(--brown-dark); }
     .btn-primary:active { transform: scale(0.98); }
     .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-danger { background: none; border: 1.5px solid #e57373; color: #c62828; padding: 6px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+    .btn-danger { background: none; border: 1.5px solid #e57373; color: #c62828; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.15s; }
     .btn-danger:hover { background: #ffebee; }
 
     /* Toast */
     #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--brown-dark); color: var(--cream); padding: 12px 24px; border-radius: 12px; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,0.3); transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); z-index: 999; pointer-events: none; }
     #toast.show { transform: translateX(-50%) translateY(0); }
 
+    /* This Week's Pick */
+    .pick-card { background: linear-gradient(135deg, var(--brown-dark), var(--brown)); color: var(--cream); border-radius: 16px; padding: 22px; margin-bottom: 16px; box-shadow: 0 4px 20px rgba(62,32,18,0.25); }
+    .pick-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; opacity: 0.75; margin-bottom: 6px; }
+    .pick-name { font-size: 1.4rem; font-weight: 800; margin-bottom: 4px; }
+    .pick-sub { font-size: 0.85rem; opacity: 0.8; }
+    .pick-empty { font-size: 0.95rem; opacity: 0.8; }
+    .pick-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; background: rgba(255,255,255,0.15); border-radius: 8px; padding: 7px 14px; font-size: 0.85rem; font-weight: 600; color: var(--cream); text-decoration: none; transition: background 0.15s; }
+    .pick-link:hover { background: rgba(255,255,255,0.25); }
+
+    /* Recommend a place */
+    .recommend-card { border: 2px dashed var(--cream-dark); border-radius: 16px; padding: 20px; margin-bottom: 24px; background: var(--white); }
+    .recommend-card h3 { margin-bottom: 14px; }
+    .recommend-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: end; }
+
     /* Leaderboard */
-    .leaderboard-item { display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--white); border-radius: 14px; box-shadow: 0 2px 12px var(--shadow); margin-bottom: 12px; transition: transform 0.15s; }
+    .leaderboard-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: var(--white); border-radius: 14px; box-shadow: 0 2px 12px var(--shadow); margin-bottom: 10px; transition: transform 0.15s; }
     .leaderboard-item:hover { transform: translateY(-1px); }
-    .rank { font-size: 1.5rem; font-weight: 800; min-width: 44px; text-align: center; color: var(--brown-mid); }
+    .rank { font-size: 1.4rem; font-weight: 800; min-width: 40px; text-align: center; color: var(--brown-mid); }
     .rank.r1 { color: var(--gold); }
     .rank.r2 { color: var(--silver); }
     .rank.r3 { color: var(--bronze); }
-    .shop-info { flex: 1; }
-    .shop-name { font-size: 1.1rem; font-weight: 700; color: var(--brown-dark); }
-    .shop-meta { font-size: 0.82rem; color: var(--text-mid); margin-top: 3px; }
-    .score-badge { text-align: center; background: var(--cream); border-radius: 12px; padding: 8px 16px; }
-    .score-big { font-size: 1.5rem; font-weight: 800; color: var(--brown); line-height: 1; }
-    .score-label { font-size: 0.7rem; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+    .shop-info { flex: 1; min-width: 0; }
+    .shop-name { font-size: 1.05rem; font-weight: 700; color: var(--brown-dark); }
+    .shop-meta { font-size: 0.8rem; color: var(--text-mid); margin-top: 2px; }
+    .score-badge { text-align: center; background: var(--cream); border-radius: 12px; padding: 8px 14px; flex-shrink: 0; }
+    .score-big { font-size: 1.4rem; font-weight: 800; color: var(--brown); line-height: 1; }
+    .score-label { font-size: 0.68rem; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
     .mini-bars { display: flex; gap: 4px; margin-top: 8px; flex-wrap: wrap; }
     .mini-bar-group { display: flex; align-items: center; gap: 4px; background: var(--cream); border-radius: 6px; padding: 3px 8px; }
-    .mini-bar-label { font-size: 0.72rem; color: var(--text-mid); font-weight: 600; }
-    .mini-bar-val { font-size: 0.78rem; font-weight: 700; color: var(--caramel); }
-    .score-bar-container { margin-top: 6px; }
+    .mini-bar-label { font-size: 0.7rem; color: var(--text-mid); font-weight: 600; }
+    .mini-bar-val { font-size: 0.75rem; font-weight: 700; color: var(--caramel); }
+    .score-bar-container { margin-top: 5px; }
     .score-bar { height: 4px; border-radius: 2px; background: var(--cream-dark); overflow: hidden; }
     .score-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--brown-mid)); border-radius: 2px; transition: width 0.5s ease; }
 
+    /* Members */
+    .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .member-card { background: var(--white); border-radius: 14px; padding: 16px; box-shadow: 0 2px 12px var(--shadow); }
+    .member-name { font-size: 1rem; font-weight: 700; color: var(--brown-dark); margin-bottom: 4px; }
+    .member-visits { font-size: 0.8rem; color: var(--text-mid); margin-bottom: 10px; }
+    .member-stats { display: flex; flex-direction: column; gap: 4px; }
+    .member-stat { display: flex; justify-content: space-between; font-size: 0.8rem; }
+    .member-stat-label { color: var(--text-mid); }
+    .member-stat-val { font-weight: 700; color: var(--caramel); }
+
     /* History */
-    .visit-card { background: var(--white); border-radius: 14px; padding: 18px 20px; box-shadow: 0 2px 12px var(--shadow); margin-bottom: 12px; }
-    .visit-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-    .visit-shop { font-size: 1.05rem; font-weight: 700; color: var(--brown-dark); }
-    .visit-date { font-size: 0.8rem; color: var(--text-mid); }
-    .visit-ordered { font-size: 0.9rem; color: var(--text-mid); margin-bottom: 10px; }
+    .visit-card { background: var(--white); border-radius: 14px; padding: 16px 18px; box-shadow: 0 2px 12px var(--shadow); margin-bottom: 10px; }
+    .visit-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+    .visit-shop { font-size: 1rem; font-weight: 700; color: var(--brown-dark); }
+    .visit-date { font-size: 0.78rem; color: var(--text-mid); margin-top: 2px; }
+    .visit-ordered { font-size: 0.88rem; color: var(--text-mid); margin-bottom: 8px; }
     .visit-ordered strong { color: var(--text); }
-    .visit-notes { font-size: 0.88rem; color: var(--text-mid); font-style: italic; margin-top: 8px; border-top: 1px solid var(--cream-dark); padding-top: 8px; }
-    .visit-scores { display: flex; gap: 6px; flex-wrap: wrap; }
-    .score-chip { background: var(--cream); border-radius: 6px; padding: 4px 10px; font-size: 0.78rem; font-weight: 600; color: var(--text-mid); }
+    .visit-notes { font-size: 0.85rem; color: var(--text-mid); font-style: italic; margin-top: 8px; border-top: 1px solid var(--cream-dark); padding-top: 8px; }
+    .visit-scores { display: flex; gap: 5px; flex-wrap: wrap; }
+    .score-chip { background: var(--cream); border-radius: 6px; padding: 3px 9px; font-size: 0.76rem; font-weight: 600; color: var(--text-mid); }
     .score-chip span { color: var(--caramel); font-weight: 700; }
-    .total-chip { background: var(--brown); color: var(--cream); border-radius: 6px; padding: 4px 10px; font-size: 0.78rem; font-weight: 700; }
+    .total-chip { background: var(--brown); color: var(--cream); border-radius: 6px; padding: 3px 9px; font-size: 0.76rem; font-weight: 700; }
+
+    /* Picks page */
+    .pick-pool-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--white); border-radius: 12px; box-shadow: 0 2px 10px var(--shadow); margin-bottom: 8px; }
+    .pick-pool-name { flex: 1; font-weight: 600; color: var(--brown-dark); }
+    .pick-pool-meta { font-size: 0.78rem; color: var(--text-mid); }
+    .pick-pool-link { font-size: 0.8rem; color: var(--caramel); font-weight: 600; text-decoration: none; }
+    .pick-pool-link:hover { text-decoration: underline; }
+    .badge-thisweek { background: var(--gold); color: var(--brown-dark); font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
 
     .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    .empty-state { text-align: center; padding: 48px 24px; color: var(--text-mid); }
-    .empty-state .emoji { font-size: 3rem; margin-bottom: 12px; }
-    .empty-state p { font-size: 1rem; }
+    .empty-state { text-align: center; padding: 40px 24px; color: var(--text-mid); }
+    .empty-state .emoji { font-size: 2.5rem; margin-bottom: 10px; }
+    .empty-state p { font-size: 0.95rem; }
 
-    @media (max-width: 540px) {
+    @media (max-width: 560px) {
       .form-grid { grid-template-columns: 1fr; }
       .ratings-grid { grid-template-columns: 1fr; }
-      nav button { padding: 8px 10px; font-size: 0.82rem; }
-      .logo { font-size: 1.1rem; }
+      .recommend-grid { grid-template-columns: 1fr; }
+      nav button { padding: 8px 8px; font-size: 0.8rem; }
+      .logo { font-size: 1rem; }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="logo"><span>☕</span> Friday Coffee Club</div>
+  <div class="logo">☕ Friday Coffee Club</div>
   <nav>
-    <button onclick="showPage('leaderboard')" id="nav-leaderboard" class="active">Leaderboard</button>
+    <button onclick="showPage('leaderboard')" id="nav-leaderboard" class="active">Home</button>
     <button onclick="showPage('add')" id="nav-add">Add Visit</button>
     <button onclick="showPage('history')" id="nav-history">History</button>
+    <button onclick="showPage('picks')" id="nav-picks">Picks</button>
   </nav>
 </header>
 
-<!-- LEADERBOARD -->
+<!-- LEADERBOARD / HOME -->
 <div class="page active" id="page-leaderboard">
-  <h2>Leaderboard</h2>
-  <div id="leaderboard-list"><div class="empty-state"><div class="spinner" style="display:inline-block;border-color:var(--cream-dark);border-top-color:var(--caramel);width:32px;height:32px;border-width:3px;"></div></div></div>
+
+  <!-- This Week's Pick -->
+  <div id="weekly-pick-card"></div>
+
+  <!-- Recommend a Place -->
+  <div class="recommend-card">
+    <h3>📍 Recommend a Place</h3>
+    <div class="recommend-grid">
+      <div class="form-group">
+        <label>Coffee Shop Name</label>
+        <input type="text" id="rec-name" placeholder="e.g. Monmouth Coffee" />
+      </div>
+      <div class="form-group">
+        <label>Google Maps Link</label>
+        <input type="url" id="rec-url" placeholder="https://maps.google.com/..." />
+      </div>
+    </div>
+    <div style="margin-top:12px;display:flex;align-items:center;gap:12px;">
+      <button class="btn-sm" onclick="submitRecommendation()">Add to Pool</button>
+      <span id="rec-error" style="font-size:0.82rem;color:#c62828;"></span>
+    </div>
+  </div>
+
+  <!-- Leaderboard -->
+  <div class="section-label">Leaderboard</div>
+  <div id="leaderboard-list">
+    <div class="empty-state"><div class="spinner" style="border-color:var(--cream-dark);border-top-color:var(--caramel);width:32px;height:32px;border-width:3px;display:inline-block;"></div></div>
+  </div>
+
+  <!-- Members -->
+  <div class="section-label" style="margin-top:28px;">Members</div>
+  <div class="members-grid" id="members-grid"></div>
 </div>
 
 <!-- ADD VISIT -->
@@ -145,7 +219,7 @@
   <div class="card">
     <div class="form-grid">
       <div class="form-group">
-        <label>Coffee Shop Name</label>
+        <label>Coffee Shop</label>
         <input type="text" id="f-shop" placeholder="e.g. The Barn" />
       </div>
       <div class="form-group">
@@ -154,7 +228,17 @@
       </div>
       <div class="form-group">
         <label>Your Name</label>
-        <input type="text" id="f-name" placeholder="e.g. Luca" />
+        <select id="f-name">
+          <option value="">— Select —</option>
+          <option value="__new__">＋ Add new person...</option>
+        </select>
+        <div id="new-person-row">
+          <div class="new-person-controls">
+            <input type="text" id="new-person-input" placeholder="Enter your name" />
+            <button class="btn-sm" onclick="saveNewPerson()">Save</button>
+            <button class="btn-sm-ghost" onclick="cancelNewPerson()">✕</button>
+          </div>
+        </div>
       </div>
       <div class="form-group">
         <label>What You Ordered</label>
@@ -184,6 +268,12 @@
   <div id="history-list"></div>
 </div>
 
+<!-- PICKS -->
+<div class="page" id="page-picks">
+  <h2>Recommendation Pool</h2>
+  <div id="picks-list"></div>
+</div>
+
 <div id="toast"></div>
 
 <script type="module">
@@ -206,23 +296,98 @@
 
   const CRITERIA = [
     { key: 'coffee',  label: 'Coffee Quality', emoji: '☕' },
-    { key: 'food',    label: 'Food',            emoji: '🥐' },
-    { key: 'vibe',    label: 'Vibe',            emoji: '✨' },
-    { key: 'service', label: 'Service',         emoji: '😊' },
-    { key: 'value',   label: 'Value for Money', emoji: '💰' },
-    { key: 'space',   label: 'Space / Seating', emoji: '🪑' },
+    { key: 'vibes',   label: 'Vibes',           emoji: '✨' },
+    { key: 'service', label: 'Service',          emoji: '😊' },
+    { key: 'price',   label: 'Price',            emoji: '💰' },
   ];
 
-  let allVisits = [];
+  let allVisits        = [];
+  let allProfiles      = [];
+  let allRecommendations = [];
 
-  /* ---- Real-time listener ---- */
-  const q = query(collection(db, 'visits'), orderBy('timestamp', 'desc'));
-  onSnapshot(q, snapshot => {
-    allVisits = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+  /* ---- ISO week seed (same pick for everyone in the same week) ---- */
+  function getWeekSeed() {
+    const d = new Date();
+    const jan4 = new Date(d.getFullYear(), 0, 4);
+    const startW1 = new Date(jan4);
+    startW1.setDate(jan4.getDate() - ((jan4.getDay() + 6) % 7));
+    const weekNum = Math.floor((d - startW1) / (7 * 86400000)) + 1;
+    return d.getFullYear() * 100 + weekNum;
+  }
+
+  /* ---- Firestore listeners ---- */
+  onSnapshot(query(collection(db, 'visits'), orderBy('timestamp', 'desc')), snap => {
+    allVisits = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     const active = document.querySelector('.page.active').id;
     if (active === 'page-leaderboard') renderLeaderboard();
     if (active === 'page-history') renderHistory();
   });
+
+  onSnapshot(query(collection(db, 'profiles'), orderBy('createdAt', 'asc')), snap => {
+    allProfiles = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    refreshProfileDropdown();
+    renderMembers();
+  });
+
+  onSnapshot(query(collection(db, 'recommendations'), orderBy('addedAt', 'asc')), snap => {
+    allRecommendations = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderWeeklyPick();
+    const active = document.querySelector('.page.active').id;
+    if (active === 'page-picks') renderPicksPool();
+  });
+
+  /* ---- Profile dropdown ---- */
+  function refreshProfileDropdown() {
+    const sel = document.getElementById('f-name');
+    const saved = localStorage.getItem('last_name') || '';
+    sel.innerHTML = '<option value="">— Select —</option>';
+    allProfiles.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p.name;
+      opt.textContent = p.name;
+      if (p.name === saved) opt.selected = true;
+      sel.appendChild(opt);
+    });
+    const newOpt = document.createElement('option');
+    newOpt.value = '__new__';
+    newOpt.textContent = '＋ Add new person...';
+    sel.appendChild(newOpt);
+  }
+
+  document.getElementById('f-name').addEventListener('change', function() {
+    const row = document.getElementById('new-person-row');
+    if (this.value === '__new__') {
+      row.classList.add('visible');
+      document.getElementById('new-person-input').focus();
+    } else {
+      row.classList.remove('visible');
+    }
+  });
+
+  window.saveNewPerson = async function() {
+    const name = document.getElementById('new-person-input').value.trim();
+    if (!name) return;
+    if (allProfiles.some(p => p.name.toLowerCase() === name.toLowerCase())) {
+      showToast('Name already exists');
+      return;
+    }
+    await addDoc(collection(db, 'profiles'), { name, createdAt: serverTimestamp() });
+    localStorage.setItem('last_name', name);
+    document.getElementById('new-person-input').value = '';
+    document.getElementById('new-person-row').classList.remove('visible');
+    // Listener will refresh dropdown; manually select the new name after next render
+    setTimeout(() => {
+      const sel = document.getElementById('f-name');
+      for (const opt of sel.options) { if (opt.value === name) { opt.selected = true; break; } }
+    }, 500);
+    showToast('Profile created!');
+  };
+
+  window.cancelNewPerson = function() {
+    document.getElementById('new-person-row').classList.remove('visible');
+    document.getElementById('new-person-input').value = '';
+    document.getElementById('f-name').value = '';
+  };
 
   /* ---- Navigation ---- */
   window.showPage = function(name) {
@@ -230,11 +395,12 @@
     document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
     document.getElementById('page-' + name).classList.add('active');
     document.getElementById('nav-' + name).classList.add('active');
-    if (name === 'leaderboard') renderLeaderboard();
+    if (name === 'leaderboard') { renderLeaderboard(); renderMembers(); }
     if (name === 'history') renderHistory();
+    if (name === 'picks') renderPicksPool();
   };
 
-  /* ---- Build rating sliders ---- */
+  /* ---- Rating sliders ---- */
   function buildRatings() {
     const container = document.getElementById('ratings-container');
     container.innerHTML = '';
@@ -253,18 +419,18 @@
 
   function setDefaults() {
     document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
-    document.getElementById('f-name').value = localStorage.getItem('last_name') || '';
   }
 
-  /* ---- Submit ---- */
+  /* ---- Submit visit ---- */
   window.submitVisit = async function() {
     const shop    = document.getElementById('f-shop').value.trim();
     const date    = document.getElementById('f-date').value;
-    const name    = document.getElementById('f-name').value.trim();
+    const sel     = document.getElementById('f-name');
+    const name    = sel.value === '__new__' ? '' : sel.value;
     const ordered = document.getElementById('f-ordered').value.trim();
 
     if (!shop || !date || !name || !ordered) {
-      alert('Please fill in shop name, date, your name, and what you ordered.');
+      alert('Please fill in all fields (and select your name from the dropdown).');
       return;
     }
 
@@ -292,16 +458,58 @@
     } catch (e) {
       alert('Failed to save: ' + e.message);
     }
-
     btn.disabled = false;
     btn.innerHTML = 'Save Visit';
   };
 
+  /* ---- Submit recommendation ---- */
+  window.submitRecommendation = async function() {
+    const name = document.getElementById('rec-name').value.trim();
+    const url  = document.getElementById('rec-url').value.trim();
+    const err  = document.getElementById('rec-error');
+    err.textContent = '';
+    if (!name) { err.textContent = 'Enter a shop name.'; return; }
+    if (url && !url.startsWith('http')) { err.textContent = 'URL should start with http.'; return; }
+
+    try {
+      await addDoc(collection(db, 'recommendations'), {
+        name, mapsUrl: url,
+        addedAt: serverTimestamp(),
+      });
+      document.getElementById('rec-name').value = '';
+      document.getElementById('rec-url').value = '';
+      showToast('Added to the pool!');
+    } catch (e) {
+      err.textContent = 'Failed: ' + e.message;
+    }
+  };
+
+  /* ---- Weekly pick ---- */
+  function renderWeeklyPick() {
+    const card = document.getElementById('weekly-pick-card');
+    if (!allRecommendations.length) {
+      card.innerHTML = `<div class="pick-card"><div class="pick-label">☕ This Week's Pick</div><div class="pick-empty">No recommendations yet — add one below!</div></div>`;
+      return;
+    }
+    const seed = getWeekSeed();
+    const pick = allRecommendations[seed % allRecommendations.length];
+    card.innerHTML = `
+      <div class="pick-card">
+        <div class="pick-label">☕ This Week's Pick</div>
+        <div class="pick-name">${esc(pick.name)}</div>
+        ${pick.mapsUrl
+          ? `<a href="${esc(pick.mapsUrl)}" target="_blank" rel="noopener" class="pick-link">📍 Open in Google Maps</a>`
+          : `<div class="pick-sub" style="margin-top:8px;">No map link added</div>`
+        }
+      </div>`;
+  }
+
   /* ---- Leaderboard ---- */
   function renderLeaderboard() {
     const container = document.getElementById('leaderboard-list');
+    renderWeeklyPick();
     if (!allVisits.length) {
-      container.innerHTML = `<div class="empty-state"><div class="emoji">☕</div><p>No visits yet — add your first coffee shop!</p></div>`;
+      container.innerHTML = `<div class="empty-state"><div class="emoji">☕</div><p>No visits yet — log your first one!</p></div>`;
       return;
     }
     const shops = {};
@@ -314,7 +522,7 @@
       const n = s.visits.length;
       const avgScore = +(s.visits.reduce((a, v) => a + v.avg, 0) / n).toFixed(1);
       const avgByKey = {};
-      CRITERIA.forEach(c => { avgByKey[c.key] = +(s.visits.reduce((a, v) => a + v.ratings[c.key], 0) / n).toFixed(1); });
+      CRITERIA.forEach(c => { avgByKey[c.key] = +(s.visits.reduce((a, v) => a + (v.ratings[c.key] || 0), 0) / n).toFixed(1); });
       return { name: s.name, count: n, avgScore, avgByKey };
     }).sort((a, b) => b.avgScore - a.avgScore);
 
@@ -333,7 +541,28 @@
             <div class="score-bar-container"><div class="score-bar"><div class="score-bar-fill" style="width:${pct}%"></div></div></div>
             <div class="mini-bars">${miniBars}</div>
           </div>
-          <div class="score-badge"><div class="score-big">${s.avgScore}</div><div class="score-label">avg / 10</div></div>
+          <div class="score-badge"><div class="score-big">${s.avgScore}</div><div class="score-label">/ 10</div></div>
+        </div>`;
+    }).join('');
+  }
+
+  /* ---- Members ---- */
+  function renderMembers() {
+    const grid = document.getElementById('members-grid');
+    if (!allProfiles.length) { grid.innerHTML = ''; return; }
+    grid.innerHTML = allProfiles.map(p => {
+      const pVisits = allVisits.filter(v => v.name === p.name);
+      const n = pVisits.length;
+      const avgOverall = n ? +(pVisits.reduce((a, v) => a + v.avg, 0) / n).toFixed(1) : '—';
+      const criteriaRows = CRITERIA.map(c => {
+        const avg = n ? +(pVisits.reduce((a, v) => a + (v.ratings[c.key] || 0), 0) / n).toFixed(1) : '—';
+        return `<div class="member-stat"><span class="member-stat-label">${c.emoji} ${c.label}</span><span class="member-stat-val">${avg}</span></div>`;
+      }).join('');
+      return `
+        <div class="member-card">
+          <div class="member-name">${esc(p.name)}</div>
+          <div class="member-visits">${n} visit${n !== 1 ? 's' : ''} · avg ${avgOverall}/10</div>
+          <div class="member-stats">${criteriaRows}</div>
         </div>`;
     }).join('');
   }
@@ -346,7 +575,10 @@
       return;
     }
     container.innerHTML = allVisits.map(v => {
-      const chips = CRITERIA.map(c => `<div class="score-chip">${c.emoji} <span>${v.ratings[c.key]}</span></div>`).join('');
+      const chips = CRITERIA.map(c => {
+        const val = v.ratings ? (v.ratings[c.key] ?? '—') : '—';
+        return `<div class="score-chip">${c.emoji} <span>${val}</span></div>`;
+      }).join('');
       const dateStr = v.date ? new Date(v.date + 'T12:00:00').toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' }) : '';
       return `
         <div class="visit-card">
@@ -361,9 +593,35 @@
     }).join('');
   }
 
+  /* ---- Picks pool ---- */
+  function renderPicksPool() {
+    const container = document.getElementById('picks-list');
+    if (!allRecommendations.length) {
+      container.innerHTML = `<div class="empty-state"><div class="emoji">📍</div><p>No recommendations yet — add one on the Home tab!</p></div>`;
+      return;
+    }
+    const seed = getWeekSeed();
+    const thisWeekIdx = seed % allRecommendations.length;
+    container.innerHTML = allRecommendations.map((r, i) => `
+      <div class="pick-pool-item">
+        <div style="flex:1;min-width:0;">
+          <div class="pick-pool-name">${esc(r.name)}</div>
+          ${r.mapsUrl ? `<a href="${esc(r.mapsUrl)}" target="_blank" rel="noopener" class="pick-pool-link">📍 Maps link</a>` : ''}
+        </div>
+        ${i === thisWeekIdx ? `<span class="badge-thisweek">This week</span>` : ''}
+        <button class="btn-danger" onclick="window.deleteRecommendation('${r.id}')">Delete</button>
+      </div>`
+    ).join('');
+  }
+
   window.deleteVisit = async function(id) {
     if (!confirm('Delete this visit?')) return;
     await deleteDoc(doc(db, 'visits', id));
+  };
+
+  window.deleteRecommendation = async function(id) {
+    if (!confirm('Remove this recommendation?')) return;
+    await deleteDoc(doc(db, 'recommendations', id));
   };
 
   /* ---- Toast ---- */
@@ -373,9 +631,10 @@
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 2200);
   }
+  window.showToast = showToast;
 
   function esc(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
   buildRatings();
