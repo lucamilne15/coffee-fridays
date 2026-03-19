@@ -122,7 +122,8 @@
     .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
     .member-card { background: var(--white); border-radius: 14px; padding: 16px; box-shadow: 0 2px 12px var(--shadow); }
     .member-name { font-size: 1rem; font-weight: 700; color: var(--brown-dark); margin-bottom: 4px; }
-    .member-visits { font-size: 0.8rem; color: var(--text-mid); margin-bottom: 10px; }
+    .member-visits { font-size: 0.8rem; color: var(--text-mid); margin-bottom: 4px; }
+    .member-fave { font-size: 0.8rem; color: var(--brown); font-weight: 600; margin-bottom: 6px; }
     .member-stats { display: flex; flex-direction: column; gap: 4px; }
     .member-stat { display: flex; justify-content: space-between; font-size: 0.8rem; }
     .member-stat-label { color: var(--text-mid); }
@@ -572,15 +573,32 @@
       const pVisits = allVisits.filter(v => v.name === p.name);
       const n = pVisits.length;
       const avgOverall = n ? +(pVisits.reduce((a, v) => a + v.avg, 0) / n).toFixed(1) : '—';
+
+      // Favourite place: shop they rated highest on average
+      let fave = '—';
+      if (n) {
+        const shopTotals = {};
+        pVisits.forEach(v => {
+          const key = v.shop.toLowerCase().trim();
+          if (!shopTotals[key]) shopTotals[key] = { name: v.shop, sum: 0, count: 0 };
+          shopTotals[key].sum += v.avg;
+          shopTotals[key].count++;
+        });
+        const best = Object.values(shopTotals).sort((a, b) => (b.sum / b.count) - (a.sum / a.count))[0];
+        fave = best.name;
+      }
+
       const criteriaRows = CRITERIA.map(c => {
         const avg = n ? +(pVisits.reduce((a, v) => a + (v.ratings[c.key] || 0), 0) / n).toFixed(1) : '—';
         return `<div class="member-stat"><span class="member-stat-label">${c.emoji} ${c.label}</span><span class="member-stat-val">${avg}</span></div>`;
       }).join('');
+
       return `
         <div class="member-card">
           <div class="member-name">${esc(p.name)}</div>
-          <div class="member-visits">${n} visit${n !== 1 ? 's' : ''} · avg ${avgOverall}/10</div>
-          <div class="member-stats">${criteriaRows}</div>
+          <div class="member-visits">☕ ${n} coffee${n !== 1 ? 's' : ''} attended · avg ${avgOverall}/10</div>
+          ${n ? `<div class="member-fave">❤️ ${esc(fave)}</div>` : ''}
+          <div class="member-stats" style="margin-top:10px;">${criteriaRows}</div>
         </div>`;
     }).join('');
   }
