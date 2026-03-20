@@ -129,6 +129,15 @@
     .member-stat-label { color: var(--text-mid); }
     .member-stat-val { font-weight: 700; color: var(--caramel); }
 
+    /* Photo upload */
+    .photo-upload-area { border: 2px dashed var(--cream-dark); border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: border-color 0.15s, background 0.15s; background: var(--cream); position: relative; }
+    .photo-upload-area:hover { border-color: var(--caramel); background: var(--white); }
+    .photo-placeholder { color: var(--text-mid); font-size: 0.9rem; pointer-events: none; }
+    .photo-placeholder span { display: block; font-size: 1.8rem; margin-bottom: 4px; }
+    #photo-preview { max-width: 100%; max-height: 220px; border-radius: 8px; object-fit: cover; display: none; }
+    .photo-clear-btn { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.5); color: #fff; border: none; border-radius: 50%; width: 26px; height: 26px; font-size: 0.85rem; cursor: pointer; display: none; align-items: center; justify-content: center; }
+    .photo-clear-btn.visible { display: flex; }
+
     /* History */
     .visit-card { background: var(--white); border-radius: 14px; padding: 16px 18px; box-shadow: 0 2px 12px var(--shadow); margin-bottom: 10px; }
     .visit-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
@@ -136,6 +145,7 @@
     .visit-date { font-size: 0.78rem; color: var(--text-mid); margin-top: 2px; }
     .visit-ordered { font-size: 0.88rem; color: var(--text-mid); margin-bottom: 8px; }
     .visit-ordered strong { color: var(--text); }
+    .visit-photo { width: 100%; border-radius: 10px; margin-bottom: 10px; max-height: 260px; object-fit: cover; cursor: pointer; }
     .visit-notes { font-size: 0.85rem; color: var(--text-mid); font-style: italic; margin-top: 8px; border-top: 1px solid var(--cream-dark); padding-top: 8px; }
     .visit-scores { display: flex; gap: 5px; flex-wrap: wrap; }
     .score-chip { background: var(--cream); border-radius: 6px; padding: 3px 9px; font-size: 0.76rem; font-weight: 600; color: var(--text-mid); }
@@ -251,6 +261,18 @@
   </div>
 
   <div class="card">
+    <div class="form-group">
+      <label>Photo (optional)</label>
+      <div class="photo-upload-area" id="photo-drop-area" onclick="document.getElementById('f-photo').click()">
+        <input type="file" id="f-photo" accept="image/*" style="display:none" onchange="window.previewPhoto(this)" />
+        <div id="photo-placeholder-wrap" class="photo-placeholder"><span>📷</span>Tap to add a photo</div>
+        <img id="photo-preview" alt="Preview" />
+        <button type="button" class="photo-clear-btn" id="photo-clear-btn" onclick="event.stopPropagation(); window.clearPhoto()">✕</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
     <h3>Ratings <small style="font-weight:400;color:var(--text-mid);font-size:0.85rem;">(each out of 10)</small></h3>
     <div class="ratings-grid" id="ratings-container"></div>
   </div>
@@ -283,6 +305,8 @@
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
   import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp }
     from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+  import { getStorage, ref as storageRef, uploadBytes, getDownloadURL }
+    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
 
   const firebaseConfig = {
     apiKey: "AIzaSyCJHPcyos1kuRykDWN3r-1pCFTHgMmmbJU",
@@ -296,6 +320,7 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+  const storage = getStorage(app);
 
   const CRITERIA = [
     { key: 'coffee',  label: 'Coffee Quality', emoji: '☕' },
@@ -435,6 +460,28 @@
     });
   }
 
+  /* ---- Photo preview ---- */
+  window.previewPhoto = function(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      document.getElementById('photo-preview').src = e.target.result;
+      document.getElementById('photo-preview').style.display = 'block';
+      document.getElementById('photo-placeholder-wrap').style.display = 'none';
+      document.getElementById('photo-clear-btn').classList.add('visible');
+    };
+    reader.readAsDataURL(file);
+  };
+
+  window.clearPhoto = function() {
+    document.getElementById('f-photo').value = '';
+    document.getElementById('photo-preview').src = '';
+    document.getElementById('photo-preview').style.display = 'none';
+    document.getElementById('photo-placeholder-wrap').style.display = 'block';
+    document.getElementById('photo-clear-btn').classList.remove('visible');
+  };
+
   function setDefaults() {
     document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
   }
@@ -458,19 +505,32 @@
 
     const btn = document.getElementById('submit-btn');
     btn.disabled = true;
+
+    // Upload photo if one was selected
+    let photoUrl = '';
+    const photoFile = document.getElementById('f-photo').files[0];
+    if (photoFile) {
+      btn.innerHTML = '<span class="spinner"></span>Uploading photo...';
+      const ext = photoFile.name.split('.').pop();
+      const photoRef = storageRef(storage, `visits/${Date.now()}.${ext}`);
+      await uploadBytes(photoRef, photoFile);
+      photoUrl = await getDownloadURL(photoRef);
+    }
+
     btn.innerHTML = '<span class="spinner"></span>Saving...';
 
     try {
       await addDoc(collection(db, 'visits'), {
         shop, date, name, ordered, ratings, avg,
         notes: document.getElementById('f-notes').value.trim(),
+        photoUrl,
         timestamp: serverTimestamp(),
       });
       localStorage.setItem('last_name', name);
       document.getElementById('f-shop').value = '';
       document.getElementById('f-ordered').value = '';
-
       document.getElementById('f-notes').value = '';
+      window.clearPhoto();
       buildRatings();
       showToast('Visit saved! ☕');
       setTimeout(() => window.showPage('leaderboard'), 800);
@@ -618,6 +678,7 @@
       const dateStr = v.date ? new Date(v.date + 'T12:00:00').toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' }) : '';
       return `
         <div class="visit-card">
+          ${v.photoUrl ? `<img src="${esc(v.photoUrl)}" class="visit-photo" alt="${esc(v.shop)}" onclick="window.open('${esc(v.photoUrl)}','_blank')" />` : ''}
           <div class="visit-header">
             <div><div class="visit-shop">${esc(v.shop)}</div><div class="visit-date">${dateStr} · ${esc(v.name)}</div></div>
             <button class="btn-danger" onclick="window.deleteVisit('${v.id}')">Delete</button>
